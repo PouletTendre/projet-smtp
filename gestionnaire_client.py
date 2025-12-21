@@ -1,9 +1,8 @@
 import socket
 from email import Email
 
-
 class GestionnaireClient:
-   
+    
     #Worker/Handler : Gère la discussion avec un client spécifique
     # Initialise avec le socket (le tuyau) du client déjà connecté
     def __init__(self, client_socket: socket.socket):
@@ -22,16 +21,14 @@ class GestionnaireClient:
             self.reader = self.client_socket.makefile('r')
             self.writer = self.client_socket.makefile('w')
 
-
             # Envoyer le message de bienvenue
             self.envoyer_reponse("220 Simple SMTP Server prét à recevoir !")
 
-
-            while True: # J'attends une commande (texte) du client !
+            while True: # J'attends une commande (texte) du client ! 
                 ligne = self.reader.readline()
                 if not ligne:
                     break  # bon ben le client ne veut plus discuter...
-               
+                
                 ligne = ligne.strip()
                 print(f"Reçu du client : {ligne}")
                 # Il va lire ligne par ligne ce que l'on va envoyer et interpréter ligne par ligne ce qu'il doit faire
@@ -87,11 +84,10 @@ class GestionnaireClient:
             if ligne.strip() == ".":
                 break
             lignes_contenu.append(ligne)
-       
+        
         self.email.set_contenu("".join(lignes_contenu))
         self.email.sauvegarder()
         self.envoyer_reponse("250 Message accepted and saved")
-
 
     # Ferme tout !
     def fermer_connexion(self):
