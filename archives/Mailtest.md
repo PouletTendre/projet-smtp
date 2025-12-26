@@ -1,71 +1,80 @@
-# Etape 1 : Projet SMTP
+## Equipe 1 : Serveur
 
-## Objectif
+**Attributs :** Port d'écoute (ex: 25), Socket principale.
+**Rôle :** Attendre les connexions et déléguer le travail.
 
-1. Établir le dialogue (La "Mainshake")
+#### Sous-composant : Le "ClientHandler" (Le Cerveau par connexion)
+Une fois qu'un client est connecté, ce gestionnaire prend le relais.
+**Attributs :** La socket du client connecté, l'état actuel (a-t-on reçu le MAIL FROM ?).
+**Méthodes :**
+1.  `recevoir_commande()` : Lit ce que le client envoie (l'oreille).
+2.  `analyser_commande()` : Comprend (Est-ce MAIL FROM ? RCPT TO ? DATA ?).
+3.  `repondre()` : Envoie le code (250 OK, 354 Start mail input, etc.) (la bouche).
+4.  `sauvegarder_mail()` : Si tout est fini, écrit le fichier sur le disque.
 
-Ton code doit écouter sur un port (souvent le port 25 en local) et attendre qu'un client (comme un script Python ou un outil comme telnet) se connecte. Une fois connecté, le dialogue ressemble à un jeu de "question-réponse" textuel.
-2. Gérer les trois commandes clés
+## Equipe 2 : Client
+**Attributs :** Adresse du serveur cible, Port cible, Socket.
+**Rôle :** Chef d'orchestre qui instancie les étapes une par une.
 
-Ton programme doit être capable d'interpréter les lignes de texte envoyées par le client et de réagir correctement :
+#### Les Spécialistes (Sous-classes par étape)
+Chaque classe prend la **Socket** en paramètre pour pouvoir parler.
 
-    MAIL FROM:<expediteur@test.com>
+1.  **Classe `EtapeEmetteur`**
+    *   Action : Envoie `MAIL FROM:<expediteur>`
+    *   Vérification : Attend code 250.
+2.  **Classe `EtapeRecepteur`**
+    *   Action : Envoie `RCPT TO:<destinataire>`
+    *   Vérification : Attend code 250.
+3.  **Classe `EtapeDonnees`**
+    *   Action : Envoie `DATA`
+    *   Vérification : Attend code 354.
+4.  **Classe `EtapeCorps` (Finalité)**
+    *   Action : Envoie le texte + `.` seul sur une ligne.
+    *   Vérification : Attend code 250.
+5.  **Classe `EtapeTerminus`**
+    *   Action : Envoie `QUIT`.
+    *   Vérification : Ferme la connexion.
 
-        Ce que ça veut dire : C'est le signal de départ. Ton code doit simplement valider qu'il a reçu l'info et répondre au client avec un code de succès (généralement 250 OK).
 
-    RCPT TO:<destinataire@exemple.fr>
+## Equipe 3 : mail
+**Nature :** Un objet de données (passif).
+**Attributs :**
+- `expediteur` (str)
+- `destinataire` (str)
+- `contenu` (str)
+**Méthode :** `__str__()` pour se formater proprement avant l'écriture dans un fichier.
 
-        Ce que ça veut dire : C'est l'étape cruciale pour ton exercice. Ton code doit extraire l'adresse (ici destinataire@exemple.fr). C'est ce nom qui servira à nommer ton fichier de stockage.
 
-    DATA
 
-        Ce que ça veut dire : Le client annonce qu'il va envoyer le corps du mail. Ton code doit lire tout ce qui arrive ensuite jusqu'à ce qu'il voie une ligne contenant uniquement un point (.).
+## Architecture des Fichiers
+projet-smtp/
+│
+├── mail.py              # (Le Modèle) L'objet Mail passif
+│
+├── server.py            # (Le Serveur Main) Lance l'écoute
+├── server_handler.py    # (Le Cerveau Serveur) La classe ClientHandler
+│
+├── client.py            # (Le Client Main) Interaction utilisateur
+└── client_steps.py      # (Les Outils Client) Les classes Etape...
 
-## Recrutement :
 
-### Equipe 1 : Serveur
+Organisation recommandée du code source :
 
-qu'est-ce qui caractérise un Serveur : Son port d'écoute RX et de transmission TX
-Ce que dois faire un serveur : Ecouter(), comprendre(), traiter(), envoyer(), TERMINUS()
+1.  **`mail.py`** (Modèle)
+    *   Contient la classe `Mail`.
+    *   Utilisé par le serveur pour stocker les infos avant la sauvegarde.
 
-On a besoin d'un écouteur. Il n'est caractériser par son port d'écoute.
-Ce qu'il fait : ecoute(), vérifie qu'on est bien quelqu'un qui nous parle. et si oui ou non ! remonter l'info.
-Envoyer , caractériser par son port d'envoie
-ce qu'il fait : envoyer(), au Mail l'info qu'il a reçu.
+2.  **`server_handler.py`** (Logique Serveur)
+    *   Contient la classe `ClientHandler`.
+    *   Gère la conversation (`recevoir`, `analyser`, `repondre`).
 
-On a besoin d'un Cerveau. Son but, est d'activer les bonnes fonctions du serveurs quand on en a besoins.
-Par exemple, au début on doit ecouter, comprendre, traiter, envoyer.
-Ce qu'il caractérise : rien
-ce qu'il fait : ce que le serveur doit faire, c'est le chef d'orchestre.
+3.  **`server.py`** (Main Serveur)
+    *   Crée la socket d'écoute et accepte les connexions.
+    *   Instancie `ClientHandler` pour chaque client.
 
-Comprendre : il doit comprendre chaque phrase qu'on lui envoie. 
-Traiter : effectuer les actions qu'il a compris, par exemple, si on ecoute qu'un seul . on sait que c'est la fin
-TERMINUS : Mets fin à la discussions en demander au client de stop et lui meme aussi de se stop.
+4.  **`client_steps.py`** (Logique Client)
+    *   Contient les classes `EtapeEmetteur`, `EtapeRecepteur`, etc.
 
-### Equipe 2 : Client
-
-qu'est-ce qui caractérise un Client : Son port d'ecoute et de transmissions
-Ce que dois faire un client : Ecouter(), Ecrire(), Envoyer(), Cerveau(), Terminus(), traitement()
-
-Quest'ce que caractérise le cerveau : rien
-Son job : Executer des ordes pour que le client fonctionne, du style Ecouter, Ecrire, Envoyer.
-
-Questce que caractérise l'écrivains : rien
-Son job : Pouvoir écrire()
-
-qu'est-ce qu'il caractérise le port d'écoute : Son port
-son job : écouter ce qu'on lui dit
-
-qu'est-ce qui caractérise l'envoie : son port d'émission
-son job : envoyer() ce qu'on a ecrit.
-
-qu'est-ce qui caractérise un traitement : la réponse de ce qu'on écoute. 
-Son job : executer des ordres en fonction de ce qu'il recoit autorise ou pas l'écriture et autres....
-
-Qu'est-ce qui caractérise terminus() : rien
-son job : se tuer à la fin.
-
-### Equipe 3 : mail
-
-qu'est-ce qui caractérise un intermediaire : Son nom de fichier, nom du destinateur.
-Ce que dois faire un Intermediaire : recevoir(), ce que Serveur lui envoie.
+5.  **`client.py`** (Main Client)
+    *   Gère les `input()` utilisateur.
+    *   Instancie la socket et appelle les étapes de `client_steps.py`.
