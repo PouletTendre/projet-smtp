@@ -35,9 +35,6 @@ class ClientSMTP:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.socket.connect((self.host, self.port))
             
-            self.reader = self.socket.makefile('r')
-            self.writer = self.socket.makefile('w')
-            
             # Lire le message de bienvenue du serveur
             reponse = self.lire_reponse()
             print(f"Serveur: {reponse}")
@@ -53,7 +50,15 @@ class ClientSMTP:
         
         :return: La réponse du serveur
         """
-        reponse = self.reader.readline().strip()
+        data = b""
+        while True:
+            chunk = self.socket.recv(1)
+            if not chunk:
+                break
+            data += chunk
+            if data.endswith(b"\r\n"):
+                break
+        reponse = data.decode('utf-8').strip()
         return reponse
 
     def envoyer_commande(self, commande: str) -> str:
@@ -63,8 +68,8 @@ class ClientSMTP:
         :param commande: La commande à envoyer
         :return: La réponse du serveur
         """
-        self.writer.write(commande + "\r\n")
-        self.writer.flush()
+        message = (commande + "\r\n").encode('utf-8')
+        self.socket.sendall(message)
         print(f"Client: {commande}")
         
         reponse = self.lire_reponse()
@@ -100,11 +105,11 @@ class ClientSMTP:
                 return False
 
             # Envoi du contenu
-            self.writer.write(contenu)
-            if not contenu.endswith("\n"):
-                self.writer.write("\n")
-            self.writer.write(".\r\n")
-            self.writer.flush()
+            message_complet = contenu
+            if not message_complet.endswith("\n"):
+                message_complet += "\n"
+            message_complet += ".\r\n"
+            self.socket.sendall(message_complet.encode('utf-8'))
             print("Client: [Contenu du message]")
             print("Client: .")
             
@@ -127,15 +132,11 @@ class ClientSMTP:
         Ferme proprement la connexion avec le serveur.
         """
         try:
-            if self.writer and self.socket:
+            if self.socket:
                 self.envoyer_commande("QUIT")
         except:
             pass
         finally:
-            if self.reader:
-                self.reader.close()
-            if self.writer:
-                self.writer.close()
             if self.socket:
                 self.socket.close()
             print("🔌 Déconnecté du serveur.")

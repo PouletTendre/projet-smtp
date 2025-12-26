@@ -35,18 +35,14 @@ class GestionnaireClient:
         Gère la conversation SMTP avec le client.
         """
         try:
-            self.reader = self.client_socket.makefile('r')
-            self.writer = self.client_socket.makefile('w')
-
             # Envoyer le message de bienvenue
             self.envoyer_reponse("220 Simple SMTP Server prêt à recevoir !")
 
             while True:
-                ligne = self.reader.readline()
+                ligne = self.lire_ligne()
                 if not ligne:
                     break  # Le client s'est déconnecté
                 
-                ligne = ligne.strip()
                 print(f"Reçu du client : {ligne}")
                 
                 # Traiter les commandes SMTP
@@ -68,14 +64,33 @@ class GestionnaireClient:
         finally:
             self.fermer_connexion()
 
+    def lire_ligne(self) -> str:
+        """
+        Lit une ligne du client (jusqu'à \r\n).
+        
+        :return: La ligne reçue (sans \r\n)
+        """
+        data = b""
+        while True:
+            try:
+                chunk = self.client_socket.recv(1)
+                if not chunk:
+                    return ""
+                data += chunk
+                if data.endswith(b"\r\n"):
+                    break
+            except:
+                return ""
+        return data.decode('utf-8').strip()
+
     def envoyer_reponse(self, reponse: str):
         """
         Envoie une réponse au client.
         
         :param reponse: La réponse à envoyer (code + message)
         """
-        self.writer.write(reponse + "\r\n")
-        self.writer.flush()
+        message = (reponse + "\r\n").encode('utf-8')
+        self.client_socket.sendall(message)
 
     def traiter_mail_from(self, ligne: str):
         """
@@ -114,13 +129,13 @@ class GestionnaireClient:
         lignes_contenu = []
         
         while True:
-            ligne = self.reader.readline()
+            ligne = self.lire_ligne()
             if not ligne:
                 break
             # Arrêt quand on reçoit une ligne contenant uniquement un point
             if ligne.strip() == ".":
                 break
-            lignes_contenu.append(ligne)
+            lignes_contenu.append(ligne + "\n")
         
         self.email.set_contenu("".join(lignes_contenu))
         self.email.sauvegarder()
@@ -135,9 +150,5 @@ class GestionnaireClient:
         except:
             print("Connexion fermée.")
         
-        if self.reader:
-            self.reader.close()
-        if self.writer:
-            self.writer.close()
         if self.client_socket:
             self.client_socket.close()
