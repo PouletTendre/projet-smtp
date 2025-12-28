@@ -4,7 +4,7 @@ Permet d'envoyer des emails via un serveur SMTP.
 """
 
 import sys
-from client_functions import ClientSMTP
+from archives.client_functions import ClientSMTP
 
 
 def afficher_menu():
