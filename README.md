@@ -1,3 +1,0 @@
-# Projet SMTP
-
-## PROJET UNIVERSITAIRE
