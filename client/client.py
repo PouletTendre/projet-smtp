@@ -1,3 +1,7 @@
+# Point d'entree du client SMTP
+# Permet d'envoyer un mail de maniere interactive
+# Utilisation : python client.py [port]
+
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
@@ -6,6 +10,8 @@ from client.smtp_client import SMTPClient
 
 
 def main():
+    # Fonction principale qui lance le client en mode interactif
+    # Demande les informations du mail a l'utilisateur puis l'envoie
     host = "127.0.0.1"
     port = 2525
     
