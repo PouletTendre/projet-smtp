@@ -1,0 +1,17 @@
+==================================================
+From: test@localhost.fr
+To: test@tilio.com
+
+Message-ID: <11779fb1-b29f-4c6b-9ed8-25ce9cc1f778@localhost.fr>
+Date: Sat, 3 Jan 2026 09:51:35 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: test@tilio.com
+From: noah lerou <test@localhost.fr>
+Subject: test
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+test
+
