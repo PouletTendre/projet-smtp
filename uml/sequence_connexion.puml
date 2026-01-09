@@ -1,0 +1,33 @@
+@startuml sequence_connexion_client
+
+title Sequence de connexion d'un client
+
+participant "Client (telnet)" as client
+participant "SMTPServer" as server
+participant "SMTPSession" as session
+participant "SMTPHandler" as handler
+
+client -> server : Connexion TCP
+activate server
+
+server -> session : new SMTPSession(socket, address)
+activate session
+
+session -> handler : new SMTPHandler()
+activate handler
+
+session --> client : 220 Serveur SMTP pret
+
+client -> session : EHLO hostname
+session -> handler : handle_command("EHLO hostname")
+handler --> session : 502 Command not implemented
+session --> client : 502 Command not implemented
+
+client -> session : HELO hostname
+session -> handler : handle_command("HELO hostname")
+handler --> session : 250 OK
+session --> client : 250 OK
+
+note over client, handler : Client pret a envoyer des mails
+
+@enduml

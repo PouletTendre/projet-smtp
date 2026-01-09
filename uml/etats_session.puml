@@ -1,0 +1,33 @@
+@startuml etats_session
+
+title Diagramme d'etats - Session SMTP
+
+[*] --> Connecte : Connexion TCP
+
+Connecte : Envoi 220 Serveur SMTP pret
+
+Connecte --> AttenteHelo : Client connecte
+
+AttenteHelo --> Identifie : HELO hostname / 250 OK
+AttenteHelo --> AttenteHelo : EHLO hostname / 502 Command not implemented
+
+Identifie --> MailDefini : MAIL FROM:<adresse> / 250 OK
+Identifie --> Ferme : QUIT / 221 Au revoir
+
+MailDefini --> RcptDefini : RCPT TO:<adresse> / 250 OK
+MailDefini --> Identifie : erreur / reset
+
+RcptDefini --> ModeData : DATA / 354 Entrez le message
+RcptDefini --> Identifie : erreur / reset
+
+ModeData : Reception du contenu ligne par ligne
+ModeData --> ModeData : [ligne de texte]
+ModeData --> Identifie : "." / 250 Message accepte\n(sauvegarde du mail)
+
+Identifie --> Ferme : QUIT / 221 Au revoir
+MailDefini --> Ferme : QUIT / 221 Au revoir
+RcptDefini --> Ferme : QUIT / 221 Au revoir
+
+Ferme --> [*] : Fermeture connexion
+
+@enduml

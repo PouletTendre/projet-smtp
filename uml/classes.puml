@@ -1,0 +1,81 @@
+@startuml classes
+
+title Diagramme de classes - Projet SMTP
+
+package "mail" {
+    class Mailbox {
+        - MAILBOX_DIR : str = "mailboxes"
+        --
+        + __init__()
+        + get_mailbox_path(recipient: str) : str
+        + save_message(sender: str, recipient: str, data: str)
+    }
+}
+
+package "serveur" {
+    class SMTPServer {
+        - host : str
+        - port : int
+        - socket_ecoute : socket
+        - running : bool
+        --
+        + __init__(host: str, port: int)
+        + start()
+        + stop()
+    }
+
+    class SMTPSession {
+        - client_socket : socket
+        - client_address : tuple
+        - handler : SMTPHandler
+        - running : bool
+        - buffer : str
+        --
+        + __init__(client_socket: socket, client_address: tuple)
+        + start()
+        + send_response(response: str)
+        + close()
+    }
+
+    class SMTPHandler {
+        - mailbox : Mailbox
+        - sender : str
+        - recipient : str
+        - data_mode : bool
+        - data_buffer : list
+        --
+        + __init__()
+        + reset_state()
+        + handle_command(line: str) : str
+        + handle_helo(line: str) : str
+        + handle_ehlo() : str
+        + handle_mail(line: str) : str
+        + handle_rcpt(line: str) : str
+        + handle_data() : str
+        + handle_data_content(line: str) : str
+        + is_quit(line: str) : bool
+    }
+}
+
+package "client" {
+    class SMTPClient {
+        - host : str
+        - port : int
+        - socket : socket
+        - connected : bool
+        --
+        + __init__(host: str, port: int)
+        + connect() : str
+        + send_command(command: str) : str
+        + receive() : str
+        + send_mail(sender: str, recipient: str, subject: str, body: str) : bool
+        + quit()
+        + close()
+    }
+}
+
+SMTPServer "1" *-- "0..*" SMTPSession : cree
+SMTPSession "1" *-- "1" SMTPHandler : utilise
+SMTPHandler "1" *-- "1" Mailbox : utilise
+
+@enduml
