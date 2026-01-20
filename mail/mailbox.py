@@ -20,23 +20,33 @@ class Mailbox:
             os.makedirs(self.MAILBOX_DIR)
 
     def get_mailbox_path(self, recipient):
-        """Retourne le chemin du fichier de boite mail pour un destinataire.
+        """Retourne le chemin du dossier de boite mail pour un destinataire.
 
-        Le nom du fichier correspond a l'adresse email du destinataire.
+        Le nom du dossier correspond a l'adresse email du destinataire.
         """
-        filename = recipient.replace("<", "").replace(">", "")
-        return os.path.join(self.MAILBOX_DIR, filename + ".txt")
+        dirname = recipient.replace("<", "").replace(">", "")
+        return os.path.join(self.MAILBOX_DIR, dirname)
 
     def save_message(self, sender, recipient, data):
-        """Sauvegarde un mail dans le fichier du destinataire.
+        """Sauvegarde un mail dans un fichier unique dans le dossier du destinataire.
 
-        Ajoute les en-tetes From et To puis le contenu du message.
+        Cree le dossier s'il n'existe pas et incremente le nom du fichier.
         """
-        path = self.get_mailbox_path(recipient)
-        with open(path, "a", encoding="utf-8") as f:
-            f.write("=" * 50 + "\n")
+        directory = self.get_mailbox_path(recipient)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        clean_recipient = recipient.replace("<", "").replace(">", "")
+        i = 1
+        while True:
+            filename = f"{i}_{clean_recipient}.txt"
+            filepath = os.path.join(directory, filename)
+            if not os.path.exists(filepath):
+                break
+            i += 1
+
+        with open(filepath, "w", encoding="utf-8") as f:
             f.write("From: " + sender + "\n")
             f.write("To: " + recipient + "\n")
             f.write("\n")
             f.write(data)
-            f.write("\n")
