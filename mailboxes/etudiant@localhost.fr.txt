@@ -1,0 +1,17 @@
+==================================================
+From: demo@localhost.fr
+To: etudiant@localhost.fr
+
+Message-ID: <97d46714-b68d-442d-bbb1-f6c21aae0227@localhost.fr>
+Date: Fri, 9 Jan 2026 11:03:20 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: fr
+To: etudiant@localhost.fr
+From: Testeur SMTP <demo@localhost.fr>
+Subject: =?UTF-8?Q?Test_Compatibilit=C3=A9_Client_Lourd?=
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+Ceci prouve que le serveur gère le Handshake HELO
+

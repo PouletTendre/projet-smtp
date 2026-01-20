@@ -1,0 +1,7 @@
+==================================================
+From: test@local.fr
+To: envoie@local.fr
+
+Subject: ceci est un test
+
+Test

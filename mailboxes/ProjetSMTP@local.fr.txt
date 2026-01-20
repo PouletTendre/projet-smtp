@@ -1,0 +1,7 @@
+==================================================
+From: Test@local.fr
+To: ProjetSMTP@local.fr
+
+Subject: Ceci est un test d'un client en python
+
+Ceci est un test
