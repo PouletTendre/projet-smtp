@@ -72,10 +72,32 @@ package "client" {
         + quit()
         + close()
     }
+
+    class POP3Client {
+        - host : str
+        - port : int
+        - socket : socket
+        --
+        + __init__(host: str, port: int)
+        + connect() : str
+        + send(command: str)
+        + receive() : str
+        + user(username: str) : str
+        + stat() : str
+        + list_messages(msg_num: int)
+        + retr(msg_num: int)
+        + quit()
+        + disconnect()
+    }
 }
+
 
 SMTPServer "1" *-- "0..*" SMTPSession : cree
 SMTPSession "1" *-- "1" SMTPHandler : utilise
 SMTPHandler "1" *-- "1" Mailbox : utilise
+
+POP3Server "1" *-- "0..*" POP3Session : cree
+POP3Session "1" *-- "1" POP3Handler : utilise
+POP3Handler "1" *-- "1" Mailbox : utilise
 
 @enduml

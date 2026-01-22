@@ -5,6 +5,8 @@ title Diagramme de composants - Projet SMTP
 package "Application Client" {
     [client.py] as client_main
     [SMTPClient] as smtp_client
+    [client_pop3.py] as client_pop3_main
+    [POP3Client] as pop3_client
 }
 
 package "Application Serveur" {
@@ -12,6 +14,10 @@ package "Application Serveur" {
     [SMTPServer] as smtp_server
     [SMTPSession] as smtp_session
     [SMTPHandler] as smtp_handler
+    [server_pop3.py] as server_pop3_main
+    [POP3Server] as pop3_server
+    [POP3Session] as pop3_session
+    [POP3Handler] as pop3_handler
 }
 
 package "Stockage" {
@@ -22,11 +28,20 @@ package "Stockage" {
 client_main --> smtp_client : utilise
 server_main --> smtp_server : lance
 
+client_pop3_main --> pop3_client : utilise
+server_pop3_main --> pop3_server : lance
+
 smtp_server --> smtp_session : cree pour chaque client
 smtp_session --> smtp_handler : traite les commandes
 smtp_handler --> mailbox : sauvegarde les mails
 mailbox --> mailboxes_folder : ecrit les fichiers
 
+pop3_server --> pop3_session : cree pour chaque client
+pop3_session --> pop3_handler : traite les commandes
+pop3_handler --> mailbox : lit les mails
+
 smtp_client <..> smtp_session : TCP/SMTP
+
+pop3_client <..> pop3_session : TCP/POP3
 
 @enduml

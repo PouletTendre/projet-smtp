@@ -1,0 +1,24 @@
+@startuml etats_session_pop3
+
+title Diagramme d'etats - Session POP3
+
+[*] --> Connecte : Connexion TCP
+
+Connecte : Envoi +OK Serveur POP3 pret
+
+Connecte --> Authentifie : USER utilisateur / +OK
+Connecte --> Ferme : QUIT / +OK Serveur POP3 ferme la connexion
+
+Authentifie --> Liste : STAT / +OK
+Authentifie --> Liste : LIST / +OK
+Authentifie --> Ferme : QUIT / +OK Serveur POP3 ferme la connexion
+
+Liste --> Lecture : RETR num / +OK message
+Liste --> Ferme : QUIT / +OK Serveur POP3 ferme la connexion
+
+Lecture --> Liste : retour
+Lecture --> Ferme : QUIT / +OK Serveur POP3 ferme la connexion
+
+Ferme --> [*] : Fermeture connexion
+
+@enduml

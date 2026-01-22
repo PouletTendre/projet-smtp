@@ -30,4 +30,46 @@ session --> client : 250 OK
 
 note over client, handler : Client pret a envoyer des mails
 
+== Séquence POP3 ==
+participant "POP3Client" as pop3_client
+participant "POP3Server" as pop3_server
+participant "POP3Session" as pop3_session
+participant "POP3Handler" as pop3_handler
+
+pop3_client -> pop3_server : Connexion TCP
+activate pop3_server
+
+pop3_server -> pop3_session : new POP3Session(socket, address)
+activate pop3_session
+
+pop3_session -> pop3_handler : new POP3Handler()
+activate pop3_handler
+
+pop3_session --> pop3_client : +OK Serveur POP3 pret
+
+pop3_client -> pop3_session : USER utilisateur
+pop3_session -> pop3_handler : handle_command("USER utilisateur")
+pop3_handler --> pop3_session : +OK Utilisateur
+pop3_session --> pop3_client : +OK Utilisateur
+
+pop3_client -> pop3_session : STAT
+pop3_session -> pop3_handler : handle_command("STAT")
+pop3_handler --> pop3_session : +OK n taille
+pop3_session --> pop3_client : +OK n taille
+
+pop3_client -> pop3_session : LIST
+pop3_session -> pop3_handler : handle_command("LIST")
+pop3_handler --> pop3_session : +OK ...
+pop3_session --> pop3_client : +OK ...
+
+pop3_client -> pop3_session : RETR num
+pop3_session -> pop3_handler : handle_command("RETR num")
+pop3_handler --> pop3_session : +OK message
+pop3_session --> pop3_client : +OK message
+
+pop3_client -> pop3_session : QUIT
+pop3_session -> pop3_handler : handle_command("QUIT")
+pop3_handler --> pop3_session : +OK Serveur POP3 ferme la connexion
+pop3_session --> pop3_client : +OK Serveur POP3 ferme la connexion
+
 @enduml

@@ -1,0 +1,61 @@
+@startuml sequence_consultation_pop3
+
+title Sequence de consultation d'un mail via POP3
+
+actor "Utilisateur" as user
+participant "POP3Client" as client
+participant "POP3Server" as server
+participant "POP3Session" as session
+participant "POP3Handler" as handler
+participant "Mailbox" as mailbox
+
+user -> client : connect()
+activate client
+
+client -> server : Connexion TCP
+activate server
+server -> session : new POP3Session(socket, address)
+activate session
+session -> handler : new POP3Handler()
+activate handler
+handler -> mailbox : new Mailbox()
+activate mailbox
+
+session --> client : +OK Serveur POP3 pret
+
+client -> session : USER utilisateur
+session -> handler : handle_command("USER utilisateur")
+handler --> session : +OK Utilisateur
+session --> client : +OK Utilisateur
+
+client -> session : STAT
+session -> handler : handle_command("STAT")
+handler --> session : +OK n taille
+session --> client : +OK n taille
+
+client -> session : LIST
+session -> handler : handle_command("LIST")
+handler --> session : +OK ...
+session --> client : +OK ...
+
+client -> session : RETR num
+session -> handler : handle_command("RETR num")
+handler -> mailbox : get_message(user, num)
+mailbox --> handler : message
+handler --> session : +OK message
+session --> client : +OK message
+
+client -> session : QUIT
+session -> handler : handle_command("QUIT")
+handler --> session : +OK Serveur POP3 ferme la connexion
+session --> client : +OK Serveur POP3 ferme la connexion
+
+client --> user : Affiche le message
+
+deactivate mailbox
+deactivate handler
+deactivate session
+deactivate server
+deactivate client
+
+@enduml

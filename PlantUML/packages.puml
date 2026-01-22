@@ -7,6 +7,8 @@ package "projet-smtp" {
     package "client" {
         [client.py] <<script>>
         [smtp_client.py] <<module>>
+        [client_pop3.py] <<script>>
+        [pop3_client.py] <<module>>
     }
     
     package "serveur" {
@@ -14,6 +16,10 @@ package "projet-smtp" {
         [smtp_server.py] <<module>>
         [smtp_session.py] <<module>>
         [smtp_handler.py] <<module>>
+        [server_pop3.py] <<script>>
+        [pop3_server.py] <<module>>
+        [pop3_session.py] <<module>>
+        [pop3_handler.py] <<module>>
     }
     
     package "mail" {
@@ -25,8 +31,10 @@ package "projet-smtp" {
     }
 }
 
+
 serveur ..> mail : import
 smtp_handler.py --> mailbox.py : utilise
+pop3_handler.py --> mailbox.py : utilise
 
 note bottom of mailboxes
     Stockage des mails
