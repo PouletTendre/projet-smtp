@@ -1,0 +1,36 @@
+@startuml packages
+
+title Diagramme de packages - Projet SMTP
+
+package "projet-smtp" {
+    
+    package "client" {
+        [client.py] <<script>>
+        [smtp_client.py] <<module>>
+    }
+    
+    package "serveur" {
+        [server.py] <<script>>
+        [smtp_server.py] <<module>>
+        [smtp_session.py] <<module>>
+        [smtp_handler.py] <<module>>
+    }
+    
+    package "mail" {
+        [mailbox.py] <<module>>
+    }
+    
+    folder "mailboxes" {
+        file "destinataire@mail.txt"
+    }
+}
+
+serveur ..> mail : import
+smtp_handler.py --> mailbox.py : utilise
+
+note bottom of mailboxes
+    Stockage des mails
+    Un fichier par destinataire
+end note
+
+@enduml
