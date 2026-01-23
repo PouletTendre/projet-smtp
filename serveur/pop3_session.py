@@ -7,13 +7,11 @@ from serveur.pop3_handler import POP3Handler
 
 
 class POP3Session:
-    """Classe qui gere une session avec un client POP3.
-
-    Recoit les commandes, les transmet au handler et renvoie les reponses.
-    """
+    #Classe qui gere une session avec un client POP3.
+    # Recoit les commandes, les transmet au handler et renvoie les reponses.
 
     def __init__(self, client_socket, client_address):
-        """Initialise la session avec la socket client et son adresse."""
+        # Initialise la session avec la socket client et son adresse
         self.client_socket = client_socket
         self.client_address = client_address
         self.handler = POP3Handler()
@@ -22,7 +20,6 @@ class POP3Session:
 
     def start(self):
         """Demarre la session et boucle sur la reception des commandes.
-
         Envoie d'abord le message de bienvenue.
         Puis traite chaque ligne recue jusqu'a QUIT ou deconnexion.
         """

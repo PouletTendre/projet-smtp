@@ -1,4 +1,4 @@
-"""Point d'entree principal du serveur mail.
+"""Orchestrateur du Serveur Mail.
 
 Lance les serveurs SMTP et POP3 en parallele.
 Utilisation : python main.py [port_smtp] [port_pop3]
@@ -10,13 +10,12 @@ import threading
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# pylint: disable=wrong-import-position
 from serveur.smtp_server import SMTPServer
 from serveur.pop3_server import POP3Server
 
 
 def main():
-    """Fonction principale qui lance les serveurs SMTP et POP3."""
+    # Initialisation du serveur !
     host = "127.0.0.1"
     port_smtp = 2525
     port_pop3 = 1100

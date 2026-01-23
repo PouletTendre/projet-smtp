@@ -7,11 +7,7 @@ from mail.mailbox import Mailbox
 
 
 class SMTPHandler:
-    """Classe qui gere l'interpretation des commandes SMTP.
-
-    Supporte les commandes : HELO, EHLO, MAIL, RCPT, DATA, QUIT
-    """
-
+    # Classe qui gere l'interpretation des commandes SMTP.
     def __init__(self):
         """Initialise le handler avec une boite mail et reinitialise l'etat."""
         self.mailbox = Mailbox()
@@ -21,20 +17,17 @@ class SMTPHandler:
         self.data_buffer = []
 
     def reset_state(self):
-        """Reinitialise les variables de session.
-
-        Appelee au demarrage et apres chaque mail envoye.
-        """
+        # Reinitialise les variables de session.
         self.sender = None
         self.recipient = None
         self.data_mode = False
         self.data_buffer = []
 
     def handle_command(self, line):
-        """Point d'entree principal pour traiter une commande.
+        """Point d'entree principal pour traiter une commande
 
-        Si on est en mode DATA, on traite le contenu du mail.
-        Sinon on identifie la commande et on appelle la fonction correspondante.
+        Si on est en mode DATA, on traite le contenu du mail
+        Sinon on identifie la commande et on appelle la fonction correspondante
         """
         if self.data_mode:
             return self.handle_data_content(line)
@@ -58,10 +51,8 @@ class SMTPHandler:
         return "500 Commande non reconnue"
 
     def handle_helo(self, line):
-        """Traite la commande HELO (identification du client en mode basique).
-
-        Verifie que le hostname est fourni.
-        """
+        # Traite la commande HELO (identification du client en mode basique).
+        # Verifie que le hostname est fourni.
         parts = line.split()
         if len(parts) < 2:
             return "501 Syntaxe: HELO hostname"
@@ -75,10 +66,8 @@ class SMTPHandler:
         return "502 Command not implemented"
 
     def handle_mail(self, line):
-        """Traite la commande MAIL FROM:<adresse>.
-
-        Extrait l'adresse de l'expediteur et la stocke.
-        """
+        # MAIL FROM:<adresse>
+        # Extrait l'adresse de l'expediteur et la stocke.
         upper_line = line.upper()
         if "FROM:" not in upper_line:
             return "501 Syntaxe: MAIL FROM:<adresse>"
@@ -93,11 +82,9 @@ class SMTPHandler:
         return "250 OK"
 
     def handle_rcpt(self, line):
-        """Traite la commande RCPT TO:<adresse>.
-
-        Extrait l'adresse du destinataire qui servira de nom de fichier.
-        Necessite que MAIL ait ete appele avant.
-        """
+        # RCPT TO:<adresse>.
+        # Extrait l'adresse du destinataire qui servira de nom de fichier.
+        # Necessite que MAIL ait ete appele avant.
         if self.sender is None:
             return "503 MAIL requis avant RCPT"
 
@@ -115,11 +102,10 @@ class SMTPHandler:
         return "250 OK"
 
     def handle_data(self):
-        """Traite la commande DATA.
-
-        Active le mode reception du contenu du mail.
-        Necessite que MAIL et RCPT aient ete appeles avant.
-        """
+        # DATA
+        # Active le mode reception du contenu du mail
+        # Necessite que MAIL et RCPT aient ete appeles avant
+  
         if self.sender is None:
             return "503 MAIL requis avant DATA"
         if self.recipient is None:
@@ -127,7 +113,7 @@ class SMTPHandler:
 
         self.data_mode = True
         self.data_buffer = []
-        return "354 Entrez le message, terminez par un point"
+        return "354 Entrez le message, terminez par FIN"
 
     def handle_data_content(self, line):
         """Traite chaque ligne du contenu du mail.

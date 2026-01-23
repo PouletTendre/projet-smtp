@@ -8,7 +8,6 @@ from serveur.smtp_handler import SMTPHandler
 
 class SMTPSession:
     """Classe qui gere une session avec un client SMTP.
-
     Recoit les commandes, les transmet au handler et renvoie les reponses.
     """
 
@@ -21,10 +20,9 @@ class SMTPSession:
         self.buffer = ""
 
     def start(self):
-        """Demarre la session et boucle sur la reception des commandes.
-
-        Envoie d'abord le message de bienvenue 220.
-        Puis traite chaque ligne recue jusqu'a QUIT ou deconnexion.
+        """Demarre la session et boucle sur la reception des commandes
+        Envoie d'abord le message de bienvenue 220
+        Puis traite chaque ligne recue jusqu'a QUIT ou deconnexion
         """
         print("Connexion de " + str(self.client_address))
         self.send_response("220 Serveur SMTP pret")

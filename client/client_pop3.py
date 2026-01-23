@@ -1,7 +1,7 @@
+
 """Point d'entree du client POP3.
 
-Permet de consulter les mails de maniere interactive.
-Utilisation : python client_pop3.py [port]
+Notre orchestrateur pour le client POP3.
 """
 
 import sys
@@ -9,12 +9,11 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# pylint: disable=wrong-import-position
 from client.pop3_client import POP3Client
 
 
 def main():
-    """Fonction principale qui lance le client POP3 en mode interactif."""
+    """Lancement POP3"""
     host = "127.0.0.1"
     port = 1100
 

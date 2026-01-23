@@ -9,14 +9,12 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# pylint: disable=wrong-import-position
+
 from client.smtp_client import SMTPClient
 
 
 def main():
-    """Fonction principale qui lance le client en mode interactif.
-
-    Demande les informations du mail a l'utilisateur puis l'envoie.
+    """Debut du programme : laisse le choix à l'utilisateur de faire ce qu'il souhaite
     """
     host = "127.0.0.1"
     port = 2525

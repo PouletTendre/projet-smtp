@@ -1,4 +1,4 @@
-"""Module de traitement des commandes POP3.
+"""Module de traitement des commandes POP3
 
 Interprete les commandes POP3 envoyees par le client et retourne les reponses.
 Commandes supportees : USER, QUIT, STAT, LIST, RETR
@@ -8,10 +8,8 @@ from mail.mailbox import Mailbox
 
 
 class POP3Handler:
-    """Classe qui gere l'interpretation des commandes POP3.
+    # Classe qui gere l'interpretation des commandes POP3
 
-    Supporte les commandes : USER, QUIT, STAT, LIST, RETR
-    """
 
     def __init__(self):
         """Initialise le handler avec une boite mail."""
@@ -19,10 +17,7 @@ class POP3Handler:
         self.user = None
 
     def handle_command(self, line):
-        """Point d'entree principal pour traiter une commande.
-
-        Identifie la commande et appelle la fonction correspondante.
-        """
+        # Identifie la commande et appelle la fonction correspondante.
         line = line.strip()
         if not line:
             return None
@@ -41,31 +36,22 @@ class POP3Handler:
 
         if command in commands:
             return commands[command]()
-        return "-ERR Commande non reconnue"
+        return "-ERR Commande non reconnue" # si on se trompe
 
     def handle_user(self, args):
-        """Traite la commande USER.
-
-        Definit l'utilisateur dont on veut consulter la boite mail.
-        """
+        # USER : Definit l'utilisateur dont on veut consulter la boite mail
         if len(args) < 1:
-            return "-ERR Syntaxe: USER nom"
+            return "-ERR Syntaxe: USER nom" # Utilisateur inconnue
 
         self.user = args[0]
         return "+OK Utilisateur " + self.user
 
     def handle_quit(self):
-        """Traite la commande QUIT.
-
-        Termine la session POP3.
-        """
+        # QUIT : Termine la session POP3
         return "+OK Serveur POP3 ferme la connexion"
 
     def handle_stat(self):
-        """Traite la commande STAT.
-
-        Retourne le nombre de messages et leur taille totale.
-        """
+        # STAT : Retourne le nombre de messages et leur taille totale.
         if self.user is None:
             return "-ERR USER requis"
 
@@ -74,11 +60,7 @@ class POP3Handler:
         return "+OK " + str(count) + " " + str(size)
 
     def handle_list(self, args):
-        """Traite la commande LIST.
-
-        Sans argument : liste tous les messages avec numero et taille.
-        Avec argument : retourne la taille du message specifie.
-        """
+        # LIST : Retourne la liste des messages.
         if self.user is None:
             return "-ERR USER requis"
 
@@ -124,8 +106,5 @@ class POP3Handler:
         return response
 
     def is_quit(self, line):
-        """Verifie si la commande est QUIT.
-
-        Utilisee par la session pour savoir quand fermer la connexion.
-        """
+        # Verification de la commande QUIT
         return line.strip().upper() == "QUIT"
