@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>880</x>
+      <y>100</y>
+      <w>180</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Connecte
+--
+Envoi 220 Serveur SMTP
+Pret
+valign=top
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>960</x>
+      <y>0</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>type=initial</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>960</x>
+      <y>10</y>
+      <w>130</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+Connexion TCP</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>880</x>
+      <y>220</y>
+      <w>180</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>AttenteHelo
+--
+
+valign=top
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>960</x>
+      <y>160</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1050</x>
+      <y>220</y>
+      <w>260</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+en cas d'erreur</panel_attributes>
+    <additional_attributes>10.0;40.0;150.0;40.0;150.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>960</x>
+      <y>260</y>
+      <w>30</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>880</x>
+      <y>330</y>
+      <w>180</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>Identifie
+--
+valign=top
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>930</x>
+      <y>510</y>
+      <w>90</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>MailDefini</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1010</x>
+      <y>360</y>
+      <w>210</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+Erreur / Reset
+</panel_attributes>
+    <additional_attributes>10.0;180.0;100.0;180.0;100.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>360</y>
+      <w>190</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+@Mail_Emetteur / 250 OK</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0;10.0;180.0;120.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>630</x>
+      <y>730</y>
+      <w>90</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>FERME</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>250</y>
+      <w>270</w>
+      <h>500</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+QUIT / 221 Au revoir</panel_attributes>
+    <additional_attributes>250.0;10.0;10.0;10.0;10.0;480.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>1080</x>
+      <y>610</y>
+      <w>90</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>RcptDefini</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>660</x>
+      <y>540</y>
+      <w>310</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+QUIT / 221 Au revoir</panel_attributes>
+    <additional_attributes>290.0;10.0;290.0;30.0;10.0;30.0;10.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>970</x>
+      <y>540</y>
+      <w>180</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Recepteur / 250 OK
+lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0;160.0;30.0;160.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1050</x>
+      <y>340</y>
+      <w>320</w>
+      <h>310</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+Erreur / Reset
+</panel_attributes>
+    <additional_attributes>120.0;290.0;210.0;290.0;210.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>690</x>
+      <y>600</y>
+      <w>410</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+QUIT / 221 Au revoir</panel_attributes>
+    <additional_attributes>390.0;20.0;10.0;20.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1110</x>
+      <y>640</y>
+      <w>220</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+DATA / 354 Entrez le message </panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;160.0;60.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>1170</x>
+      <y>770</y>
+      <w>180</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>MODE DATA
+--
+Reception ligne par ligne
+valign=top
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1050</x>
+      <y>330</y>
+      <w>590</w>
+      <h>490</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+"FIN" / 250 Message accepté
+Enregistrement du mail
+</panel_attributes>
+    <additional_attributes>300.0;470.0;390.0;470.0;390.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>660</x>
+      <y>820</y>
+      <w>20</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>type=final</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>660</x>
+      <y>760</y>
+      <w>200</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+Fermeture de la connexion</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+</diagram>
