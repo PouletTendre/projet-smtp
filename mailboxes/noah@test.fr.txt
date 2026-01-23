@@ -1,0 +1,23 @@
+==================================================
+From: hugo@test.fr
+To: noah@test.fr
+
+Subject: Ceci est un mail test
+
+Bonjour
+==================================================
+From: demo@localhost.fr
+To: noah@test.fr
+
+Message-ID: <77491701-cc5f-4780-a135-93b4ada22c94@localhost.fr>
+Date: Fri, 23 Jan 2026 18:35:49 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: fr
+To: noah@test.fr
+From: Testeur SMTP <demo@localhost.fr>
+Subject: Ceci est un test de client lourd
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Bonsoir

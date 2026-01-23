@@ -1,0 +1,25 @@
+==================================================
+From: test@local.fr
+To: jesuisletest@local.fr
+
+Subject: ceci est un text
+
+Test
+Fin
+==================================================
+From: demo@localhost.fr
+To: jesuisletest@local.fr
+
+Message-ID: <b43f1ed2-6167-4018-8b20-1a64d07725a5@localhost.fr>
+Date: Fri, 23 Jan 2026 18:30:47 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: fr
+To: jesuisletest@local.fr
+From: Testeur SMTP <demo@localhost.fr>
+Subject: jesuisuntest
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Ceci est un message test
+
